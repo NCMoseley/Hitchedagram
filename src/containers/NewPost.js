@@ -46,10 +46,10 @@ export default class NewPost extends Component {
     this.setState({ isLoading: true });
 
     try {
-      // const attachment = this.file ? await s3Upload(this.file) : null;
+      const attachment = this.file ? await s3Upload(this.file) : null;
 
       await this.createPost({
-        // attachment,
+        attachment,
         content: this.state.content
       });
       this.props.history.push('/');
