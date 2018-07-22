@@ -1,7 +1,11 @@
 .phonebody {
   margin: 0 auto;
   /* width: 900px; */
-  text-align: left;
+  /* text-align: left; */
+}
+
+.posts {
+  margin: 0 auto;
 }
 
 i {
