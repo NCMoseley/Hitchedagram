@@ -16,6 +16,7 @@
   font-size: calc(10px + 20 * ((100vw - 320px) / 1120));
   background: linear-gradient(-0.15turn, #1f87a6, #cbf8e1);
   border: none;
+  color: white;
 }
 
 .app {
