@@ -1,0 +1,27 @@
+.image-container {
+  width: auto;
+  /* height: calc(123px + 448 * ((100vw - 320px) / 1120)); */
+  height: calc(183px + 676 * ((100vw - 320px) / 1120));
+  max-height: 859px;
+  background-repeat: no-repeat;
+  background-position: center !important;
+  background-size: contain;
+}
+
+.header {
+  margin-top: calc(50px + 100 * ((100vw - 320px) / 1120));
+}
+
+.caption {
+  margin-bottom: calc(50px + 100 * ((100vw - 320px) / 1120));
+  border-bottom: 1px solid lightgray;
+  font-size: calc(10px + 14 * ((100vw - 320px) / 1120));
+}
+
+.image img {
+  border-radius: 50%;
+}
+
+.red {
+  color: red;
+}

@@ -1,0 +1,17 @@
+.phonebody {
+  margin: 0 auto;
+  /* width: 900px; */
+  text-align: left;
+}
+
+i {
+  margin: 20px;
+}
+
+p {
+  margin-bottom: 20px;
+}
+
+img {
+  margin-bottom: 20px;
+}

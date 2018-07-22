@@ -1,0 +1,83 @@
+@font-face {
+  font-family: 'Billabong';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Billabong'), url('Billabong.woff') format('woff');
+}
+
+.SvrlsApp {
+  margin-top: 15px;
+}
+
+.SvrlsApp .navbar-brand {
+  font-weight: bold;
+}
+
+.crsr {
+  cursor: pointer;
+}
+
+.btn {
+  margin: 5%;
+  width: calc(125px + 150 * ((100vw - 320px) / 1120));
+  height: calc(25px + 50 * ((100vw - 320px) / 1120));
+  font-size: calc(10px + 20 * ((100vw - 320px) / 1120));
+  background: linear-gradient(-0.15turn, #1f87a6, #cbf8e1);
+  border: none;
+}
+
+.app {
+  max-width: 1440px;
+  text-align: center;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-bottom: 50px;
+  padding-top: calc(70px + 130 * ((100vw - 320px) / 1120));
+  font-size: calc(10px + 20 * ((100vw - 320px) / 1120));
+  margin: 0 auto;
+}
+
+@media all and (min-width: 1440px) {
+  .app {
+    padding-left: 71.25px;
+    padding-right: 71.25px;
+  }
+}
+
+.phone-header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: calc(50px + 110 * ((100vw - 320px) / 1120));
+  background-color: rgb(234, 251, 255);
+  z-index: 4;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-title {
+  font-family: 'Billabong';
+  word-wrap: break-word;
+  font-size: 30px;
+  font-size: calc(30px + 90 * ((100vw - 320px) / 1120));
+}
+
+.phone-footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(234, 251, 255);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  z-index: 4;
+}
+
+.upload-cta {
+  padding-left: 5%;
+  padding-right: 5%;
+}
