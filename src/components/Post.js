@@ -27,8 +27,8 @@ class Post extends Component {
     return (
       <div className="posts">
         {posts.map(post => (
-          <div className="single-post">
-            <div className="header level">
+          <div key={post.username} className="single-post">
+            <div key={post.username} className="header level">
               <figure className="image is-32x32">
                 <img alt="gravatar" key={post.userImage} src={post.userImage} />
               </figure>
