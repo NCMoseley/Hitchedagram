@@ -1,3 +1,7 @@
+.posts {
+  max-width: 1440px;
+}
+
 .image-container {
   width: auto;
   /* height: calc(123px + 448 * ((100vw - 320px) / 1120)); */

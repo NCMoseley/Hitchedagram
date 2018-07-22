@@ -53,27 +53,27 @@ class App extends Component {
     return (
       !this.state.isAuthenticating && (
         <div className="app">
-          <header className="phone-header">
-            <h1 className="app-title">Hitchedagram</h1>
-          </header>
-          <div className="SvrlsApp container">
+          <header className="fixed-header">
             <Navbar fluid collapseOnSelect>
               <Navbar.Header>
-                <Navbar.Brand>
-                  <Link to="/">Scratch</Link>
-                </Navbar.Brand>
+                <Link className="app-title" to="/">
+                  Hitchedagram
+                </Link>
                 <Navbar.Toggle />
               </Navbar.Header>
+
               <Navbar.Collapse>
                 <Nav pullRight>
                   {this.state.isAuthenticated ? (
-                    <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                    <NavItem className="logout" onClick={this.handleLogout}>
+                      Logout
+                    </NavItem>
                   ) : (
                     <Fragment>
-                      <LinkContainer to="/signup">
+                      <LinkContainer className="signup" to="/signup">
                         <NavItem>Signup</NavItem>
                       </LinkContainer>
-                      <LinkContainer to="/login">
+                      <LinkContainer className="login" to="/login">
                         <NavItem>Login</NavItem>
                       </LinkContainer>
                     </Fragment>
@@ -81,16 +81,17 @@ class App extends Component {
                 </Nav>
               </Navbar.Collapse>
             </Navbar>
-            <Routes childProps={childProps} />
-          </div>
+          </header>
+
+          <Routes childProps={childProps} />
 
           <PhoneBody />
           <div className="phone-footer">
             <div className="home-cta">
-              <i className="fas fa-home fa-lg crsr" />
+              <i className="fas fa-home fa-lg cursor" />
             </div>
             <div onClick={this.togglePopup.bind(this)} className="upload-cta">
-              <i className="far fa-plus-square fa-lg crsr" />
+              <i className="far fa-plus-square fa-lg cursor" />
             </div>
           </div>
           {this.state.showPopup ? (

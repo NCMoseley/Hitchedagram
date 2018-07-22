@@ -12,10 +12,10 @@ class Popup extends Component {
           <div className="popup-footer">
             <i
               onClick={this.props.closePopup}
-              className="fa fa-window-close fa-3x crsr"
+              className="fa fa-window-close fa-3x cursor"
               aria-hidden="true"
             />
-            <i className="fas fa-arrow-right fa-3x crsr" aria-hidden="true" />
+            <i className="fas fa-arrow-right fa-3x cursor" aria-hidden="true" />
           </div>
         </div>
       </div>

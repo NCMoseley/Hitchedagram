@@ -93,7 +93,7 @@ class ImagePicker extends Component {
         </div>
 
         <button
-          className="clear-image btn crsr"
+          className="clear-image btn cursor"
           type="button"
           onClick={this.handleClearClick}
         >
