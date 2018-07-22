@@ -12,20 +12,18 @@
 .btn {
   margin: 5%;
   width: calc(125px + 150 * ((100vw - 320px) / 1120));
-  height: calc(25px + 50 * ((100vw - 320px) / 1120));
+  /* height: calc(25px + 50 * ((100vw - 320px) / 1120)); */
   font-size: calc(10px + 20 * ((100vw - 320px) / 1120));
   background: linear-gradient(-0.15turn, #1f87a6, #cbf8e1);
   border: none;
 }
 
 .app {
-  /* max-width: 1440px; */
-  /* text-align: center; */
   padding-left: 5%;
   padding-right: 5%;
   padding-bottom: 50px;
-  padding-top: calc(100px + 200 * ((100vw - 320px) / 1120));
-  font-size: calc(10px + 20 * ((100vw - 320px) / 1120));
+  padding-top: calc(100px + 100 * ((100vw - 320px) / 1120));
+  font-size: calc(10px + 15 * ((100vw - 320px) / 1120));
   margin: 0 auto;
 }
 
@@ -35,20 +33,6 @@
     padding-right: 71.25px;
   }
 }
-
-/* .phone-header {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: calc(50px + 110 * ((100vw - 320px) / 1120));
-  background-color: rgb(234, 251, 255);
-  z-index: 4;
-  backface-visibility: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-} */
 
 .fixed-header {
   display: flex;
@@ -65,13 +49,20 @@
   backface-visibility: hidden;
 }
 
+@media all and (min-width: 1000px) {
+  .fixed-header {
+    padding: 1% 1% 0 1%;
+    margin-bottom: 1%;
+  }
+}
+
 .fixed-header a {
   font-family: 'Billabong';
 }
 
 a.app-title {
   font-family: 'Billabong';
-  font-size: calc(40px + 90 * ((100vw - 320px) / 1120));
+  font-size: calc(40px + 45 * ((100vw - 320px) / 1120));
   color: #4a4a4a !important;
   padding: 20px;
   line-height: 1.7;
@@ -79,12 +70,12 @@ a.app-title {
 
 .navbar-toggle {
   margin: 5%;
-  background: linear-gradient(-0.15turn, #1f87a6, #cbf8e1) !important;
+  /* background: linear-gradient(-0.15turn, #1f87a6, #cbf8e1) !important; */
 }
 
-.navbar-default .navbar-toggle .icon-bar {
+/* .navbar-default .navbar-toggle .icon-bar {
   background-color: white;
-}
+} */
 
 .navbar-collapse .collapse {
   background: none !important;
@@ -95,6 +86,7 @@ a.app-title {
 .navbar-default .navbar-nav>.active>a:hover {
   color: white;
   background: linear-gradient(-0.15turn, #1f87a6, #cbf8e1) !important;
+  height: auto;
 }
 
 .navbar-nav {
