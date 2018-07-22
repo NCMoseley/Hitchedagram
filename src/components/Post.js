@@ -27,28 +27,23 @@ class Post extends Component {
     return (
       <div className="posts">
         {posts.map(post => (
-          <div className="vuegram-post">
+          <div className="single-post">
             <div className="header level">
-              <div className="level-left">
-                <figure className="image is-32x32">
-                  <img
-                    alt="gravatar"
-                    key={post.userImage}
-                    src={post.userImage}
-                  />
-                </figure>
-                <span key={post.username} className="username">
-                  {post.username}
-                </span>
-              </div>
+              <figure className="image is-32x32">
+                <img alt="gravatar" key={post.userImage} src={post.userImage} />
+              </figure>
+              <span key={post.username} className="username">
+                {post.username}
+              </span>
             </div>
-            <div
-              onDoubleClick={_.partial(this.like, post.username)}
-              className={`image-container ${post.filter}`}
-              style={{ backgroundImage: `url(${post.postImage})` }}
-              key={post.postImage}
-            />
+
             <div className="content">
+              <div
+                onDoubleClick={_.partial(this.like, post.username)}
+                className={`image-container ${post.filter}`}
+                style={{ backgroundImage: `url(${post.postImage})` }}
+                key={post.postImage}
+              />
               <div className="heart">
                 {post.hasBeenLiked ? (
                   <i
