@@ -4,6 +4,7 @@ import Home from './containers/Home';
 import Login from './containers/Login';
 import Signup from './containers/Signup';
 import NewPost from './containers/NewPost';
+import Posts from './containers/Posts';
 import NotFound from './containers/NotFound';
 import AppliedRoute from './components/AppliedRoute';
 
@@ -16,6 +17,12 @@ export default ({ childProps }) => (
       path="/posts/new"
       exact
       component={NewPost}
+      props={childProps}
+    />
+    <AppliedRoute
+      path="/posts/:id"
+      exact
+      component={Posts}
       props={childProps}
     />
     {/* Finally, catch all unmatched routes */}
