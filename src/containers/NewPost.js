@@ -48,7 +48,7 @@ export default class NewPost extends Component {
     try {
       const attachment = this.file ? await s3Upload(this.file) : null;
 
-      await this.createNote({
+      await this.createpost({
         attachment,
         content: this.state.content
       });
