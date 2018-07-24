@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { API, Storage } from 'aws-amplify';
-import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { FormGroup, FormControl, ControlLabel, Image } from 'react-bootstrap';
 import LoaderButton from '../components/LoaderButton';
 import config from '../config';
 import { s3Upload } from '../libs/awsLib';
@@ -24,7 +24,7 @@ export default class posts extends Component {
   async componentDidMount() {
     try {
       let attachmentURL;
-      const post = await this.getpost();
+      const post = await this.getPost();
       const { content, attachment } = post;
 
       if (attachment) {
@@ -127,6 +127,7 @@ export default class posts extends Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <div className="posts">
         {this.state.post && (
@@ -149,6 +150,7 @@ export default class posts extends Component {
                   >
                     {this.formatFilename(this.state.post.attachment)}
                   </a>
+                  <Image src={this.state.attachmentURL} />
                 </FormControl.Static>
               </FormGroup>
             )}

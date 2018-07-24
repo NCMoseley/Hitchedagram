@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { PageHeader, ListGroup, ListGroupItem } from 'react-bootstrap';
-import { API } from 'aws-amplify';
+import { PageHeader, ListGroup, ListGroupItem, Image } from 'react-bootstrap';
+import { API, Storage } from 'aws-amplify';
 import './home.css';
+import { s3Fetch } from '../libs/awsLib';
 
 export default class Home extends Component {
   constructor(props) {
@@ -11,6 +12,8 @@ export default class Home extends Component {
       isLoading: true,
       posts: []
     };
+    this.getImage = this.getImage.bind(this);
+    // this.newWhore = this.newWhore.bind(this);
   }
 
   async componentDidMount() {
@@ -20,6 +23,7 @@ export default class Home extends Component {
 
     try {
       const posts = await this.posts();
+
       this.setState({ posts });
     } catch (e) {
       alert(e);
@@ -32,7 +36,12 @@ export default class Home extends Component {
     return API.get('posts', '/posts');
   }
 
+  getImage(attachment) {
+    s3Fetch(attachment);
+  }
+
   renderpostsList(posts) {
+    console.log(posts);
     return [{}].concat(posts).map(
       (post, i) =>
         i !== 0 ? (
@@ -42,6 +51,7 @@ export default class Home extends Component {
             onClick={this.handlepostClick}
             header={post.content.trim().split('\n')[0]}
           >
+            <Image src={this.getImage(post.attachment)} />
             {'Created: ' + new Date(post.createdAt).toLocaleString()}
           </ListGroupItem>
         ) : (
