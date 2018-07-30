@@ -13,22 +13,20 @@ export default class Home extends Component {
       posts: []
     };
     this.getImage = this.getImage.bind(this);
-    // this.newWhore = this.newWhore.bind(this);
   }
 
   async componentDidMount() {
     if (!this.props.isAuthenticated) {
       return;
     }
-
     try {
       const posts = await this.posts();
-
-      this.setState({ posts });
+      this.setState({
+        posts
+      });
     } catch (e) {
       alert(e);
     }
-
     this.setState({ isLoading: false });
   }
 
@@ -36,8 +34,10 @@ export default class Home extends Component {
     return API.get('posts', '/posts');
   }
 
-  getImage(attachment) {
-    s3Fetch(attachment);
+  async getImage(attachment) {
+    const image = await Storage.vault.get(attachment);
+    console.log(image);
+    return image;
   }
 
   renderpostsList(posts) {

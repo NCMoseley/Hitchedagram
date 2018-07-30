@@ -11,11 +11,7 @@ export async function s3Upload(file) {
 }
 
 export async function s3Fetch(attachment) {
-  try {
-    const image = await Storage.vault.get(attachment);
-    console.log(image);
-    return image;
-  } catch (e) {
-    alert(e);
-  }
+  const image = await Storage.vault.get();
+  console.log(image);
+  return image;
 }

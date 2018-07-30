@@ -5,6 +5,7 @@ import LoaderButton from '../components/LoaderButton';
 import config from '../config';
 import { s3Upload } from '../libs/awsLib';
 import './posts.css';
+import { getPost } from '../actions/index';
 
 export default class posts extends Component {
   constructor(props) {
@@ -24,7 +25,9 @@ export default class posts extends Component {
   async componentDidMount() {
     try {
       let attachmentURL;
-      const post = await this.getPost();
+      // const post = await this.getpost();
+      const post = await getPost(this.props);
+      console.log(post);
       const { content, attachment } = post;
 
       if (attachment) {
