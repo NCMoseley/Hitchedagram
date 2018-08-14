@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Nav, Navbar, NavItem } from 'react-bootstrap';
 import './app.css';
-import PhoneBody from './components/PhoneBody.js';
+import ScreenBody from './components/ScreenBody.js';
 import Popup from './components/PopUp.js';
 import Routes from './Routes';
 import { Auth } from 'aws-amplify';
@@ -16,6 +16,8 @@ class App extends Component {
       isAuthenticated: false,
       isAuthenticating: true
     };
+    this.goToProfile = this.goToProfile.bind(this);
+    this.goToCreate = this.goToCreate.bind(this);
   }
 
   async componentDidMount() {
@@ -40,10 +42,11 @@ class App extends Component {
   userHasAuthenticated = authenticated => {
     this.setState({ isAuthenticated: authenticated });
   };
-  togglePopup() {
-    this.setState({
-      showPopup: !this.state.showPopup
-    });
+  goToCreate() {
+    this.props.history.push('/posts/new');
+  }
+  goToProfile() {
+    this.props.history.push('/profile');
   }
   render() {
     const childProps = {
@@ -85,21 +88,15 @@ class App extends Component {
 
           <Routes childProps={childProps} />
 
-          <PhoneBody />
+          <ScreenBody />
           <div className="phone-footer">
-            <div className="home-cta">
+            <div onClick={this.goToProfile} className="home-cta">
               <i className="fas fa-home fa-lg cursor" />
             </div>
-            <div onClick={this.togglePopup.bind(this)} className="upload-cta">
+            <div onClick={this.goToCreate} className="upload-cta">
               <i className="far fa-plus-square fa-lg cursor" />
             </div>
           </div>
-          {this.state.showPopup ? (
-            <Popup
-              text="Choose an image from file"
-              closePopup={this.togglePopup.bind(this)}
-            />
-          ) : null}
         </div>
       )
     );

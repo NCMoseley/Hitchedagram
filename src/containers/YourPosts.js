@@ -14,7 +14,6 @@ export default class Home extends Component {
       posts: []
     };
     this.getImage = this.getImage.bind(this);
-    this.like = this.like.bind(this);
   }
 
   async componentDidMount() {
@@ -45,15 +44,13 @@ export default class Home extends Component {
   // note
   async getImage(attachment) {
     const image = await Storage.get(attachment);
-    // console.log('getImage', image);
+    console.log('getImage', image);
     return image;
   }
 
   like(userId) {
     // eslint-disable-next-line
-    const thisPost = this.state.postsWithImages.find(
-      post => post.userId === userId
-    );
+    const thisPost = posts.find(post => post.userId === userId);
     // eslint-disable-next-line
     const liked = thisPost.hasBeenLiked ? thisPost.likes-- : thisPost.likes++;
     thisPost.hasBeenLiked = !thisPost.hasBeenLiked;
@@ -62,55 +59,43 @@ export default class Home extends Component {
   }
 
   renderpostsList(postsWithImages) {
-    return (
-      <div className="posts">
-        {postsWithImages.map(post => (
-          <ListGroup key={post.userId} className="single-post">
-            <div key={post.userId} className="header level">
-              <figure className="image is-32x32">
-                <img
-                  alt="gravatar"
-                  key={post.attachment}
-                  src={post.attachment}
+    console.log(postsWithImages);
+    return [{}].concat(postsWithImages).map(
+      (post, i) =>
+        i !== 0 ? (
+          <ListGroupItem
+            key={post.postId}
+            href={`/posts/${post.postId}`}
+            // onClick={this.handlepostClick}
+            header={post.content.trim().split('\n')[0]}
+          >
+            <Image key={post.postId} crossOrigin="anonymous" src={post.image} />
+            {'Created: ' + new Date(post.createdAt).toLocaleString()}
+            <div className="heart">
+              {post.hasBeenLiked ? (
+                <i
+                  onClick={_.partial(this.like, post.userId)}
+                  className="fas fa-heart fa-lg red"
                 />
-              </figure>
-              <span key={post.userId} className="username">
-                {post.userId}
-              </span>
+              ) : (
+                <i
+                  onClick={_.partial(this.like, post.userId)}
+                  className="far fa-heart fa-lg"
+                />
+              )}
             </div>
-
-            <div className="content">
-              <Image
-                style={{ backgroundImage: `url(${post.attachment})` }}
-                className={`image-container ${post.filter}`}
-                key={post.postId}
-                onDoubleClick={_.partial(this.like, post.userId)}
-                crossOrigin="anonymous"
-                src={post.image}
-              />
-              <div className="heart">
-                {post.hasBeenLiked ? (
-                  <i
-                    onClick={_.partial(this.like, post.userId)}
-                    className="fas fa-heart fa-lg red"
-                  />
-                ) : (
-                  <i
-                    onClick={_.partial(this.like, post.userId)}
-                    className="far fa-heart fa-lg"
-                  />
-                )}
-              </div>
-              <p key={post.likes} className="likes">
-                {post.likes} likes
-              </p>
-              <p key={post.length} className="caption">
-                <span>{post.userId}:</span> {post.content}
-              </p>
-            </div>
-          </ListGroup>
-        ))}
-      </div>
+          </ListGroupItem>
+        ) : (
+          <ListGroupItem
+            key="new"
+            href="/posts/new"
+            // onClick={this.handlepostClick}
+          >
+            <h4>
+              <b>{'\uFF0B'}</b> Create a new post
+            </h4>
+          </ListGroupItem>
+        )
     );
   }
 
@@ -131,6 +116,7 @@ export default class Home extends Component {
   renderposts() {
     return (
       <div className="posts">
+        <PageHeader>Your posts</PageHeader>
         <ListGroup>
           {!this.state.isLoading &&
             this.renderpostsList(this.state.postsWithImages)}

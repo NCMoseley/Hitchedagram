@@ -48,7 +48,9 @@ export default class NewPost extends Component {
       await this.createPost({
         attachment,
         content: this.state.content,
-        likes: 0
+        likes: 0,
+        hasBeenLiked: false,
+        filter: this.state.filter
       });
       this.props.history.push('/');
     } catch (e) {

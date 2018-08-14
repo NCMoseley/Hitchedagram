@@ -1,187 +1,188 @@
-import React, { Component } from 'react';
-import { API, Storage } from 'aws-amplify';
-import { FormGroup, FormControl, ControlLabel, Image } from 'react-bootstrap';
-import LoaderButton from '../components/LoaderButton';
-import config from '../config';
-import { s3Upload } from '../libs/awsLib';
-import './posts.css';
-import { getPost } from '../actions';
+// import React, { Component } from 'react';
+// import { API, Storage } from 'aws-amplify';
+// import { FormGroup, FormControl, ControlLabel, Image } from 'react-bootstrap';
+// import LoaderButton from '../components/LoaderButton';
+// import config from '../config';
+// import { s3Upload } from '../libs/awsLib';
 
-export default class posts extends Component {
-  constructor(props) {
-    super(props);
+// import './posts.css';
+// import { getPost } from '../actions';
 
-    this.file = null;
+// export default class posts extends Component {
+//   constructor(props) {
+//     super(props);
 
-    this.state = {
-      isLoading: null,
-      isDeleting: null,
-      post: null,
-      content: '',
-      attachmentURL: null
-    };
-  }
+//     this.file = null;
 
-  async componentDidMount() {
-    try {
-      let attachmentURL;
-      const post = await getPost(this.props);
-      const { content, attachment } = post;
+//     this.state = {
+//       isLoading: null,
+//       isDeleting: null,
+//       post: null,
+//       content: '',
+//       attachmentURL: null
+//     };
+//   }
 
-      if (attachment) {
-        attachmentURL = await Storage.vault.get(attachment);
-      }
+//   async componentDidMount() {
+//     try {
+//       let attachmentURL;
+//       const post = await getPost(this.props);
+//       const { content, attachment } = post;
 
-      this.setState({
-        post,
-        content,
-        attachmentURL
-      });
-    } catch (e) {
-      alert(e);
-    }
-  }
+//       if (attachment) {
+//         attachmentURL = await Storage.vault.get(attachment);
+//       }
 
-  getpost() {
-    return API.get('posts', `/posts/${this.props.match.params.id}`);
-  }
+//       this.setState({
+//         post,
+//         content,
+//         attachmentURL
+//       });
+//     } catch (e) {
+//       alert(e);
+//     }
+//   }
 
-  validateForm() {
-    return this.state.content.length > 0;
-  }
+//   getpost() {
+//     return API.get('posts', `/posts/${this.props.match.params.id}`);
+//   }
 
-  formatFilename(str) {
-    return str.replace(/^\w+-/, '');
-  }
+//   validateForm() {
+//     return this.state.content.length > 0;
+//   }
 
-  handleChange = event => {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
-  };
+//   formatFilename(str) {
+//     return str.replace(/^\w+-/, '');
+//   }
 
-  handleFileChange = event => {
-    this.file = event.target.files[0];
-  };
+//   handleChange = event => {
+//     this.setState({
+//       [event.target.id]: event.target.value
+//     });
+//   };
 
-  savepost(post) {
-    return API.put('posts', `/posts/${this.props.match.params.id}`, {
-      body: post
-    });
-  }
+//   handleFileChange = event => {
+//     this.file = event.target.files[0];
+//   };
 
-  handleSubmit = async event => {
-    let attachment;
+//   savepost(post) {
+//     return API.put('posts', `/posts/${this.props.match.params.id}`, {
+//       body: post
+//     });
+//   }
 
-    event.preventDefault();
+//   handleSubmit = async event => {
+//     let attachment;
 
-    if (this.file && this.file.size > config.MAX_ATTACHMENT_SIZE) {
-      alert(
-        `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE /
-          1000000} MB.`
-      );
-      return;
-    }
+//     event.preventDefault();
 
-    this.setState({ isLoading: true });
+//     if (this.file && this.file.size > config.MAX_ATTACHMENT_SIZE) {
+//       alert(
+//         `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE /
+//           1000000} MB.`
+//       );
+//       return;
+//     }
 
-    try {
-      if (this.file) {
-        attachment = await s3Upload(this.file);
-      }
+//     this.setState({ isLoading: true });
 
-      await this.savepost({
-        content: this.state.content,
-        attachment: attachment || this.state.post.attachment
-      });
-      this.props.history.push('/');
-    } catch (e) {
-      alert(e);
-      this.setState({ isLoading: false });
-    }
-  };
+//     try {
+//       if (this.file) {
+//         attachment = await s3Upload(this.file);
+//       }
 
-  deletepost() {
-    return API.del('posts', `/posts/${this.props.match.params.id}`);
-  }
+//       await this.savepost({
+//         content: this.state.content,
+//         attachment: attachment || this.state.post.attachment
+//       });
+//       this.props.history.push('/');
+//     } catch (e) {
+//       alert(e);
+//       this.setState({ isLoading: false });
+//     }
+//   };
 
-  handleDelete = async event => {
-    event.preventDefault();
+//   deletepost() {
+//     return API.del('posts', `/posts/${this.props.match.params.id}`);
+//   }
 
-    const confirmed = window.confirm(
-      'Are you sure you want to delete this post?'
-    );
+//   handleDelete = async event => {
+//     event.preventDefault();
 
-    if (!confirmed) {
-      return;
-    }
+//     const confirmed = window.confirm(
+//       'Are you sure you want to delete this post?'
+//     );
 
-    this.setState({ isDeleting: true });
+//     if (!confirmed) {
+//       return;
+//     }
 
-    try {
-      await this.deletepost();
-      this.props.history.push('/');
-    } catch (e) {
-      alert(e);
-      this.setState({ isDeleting: false });
-    }
-  };
+//     this.setState({ isDeleting: true });
 
-  render() {
-    return (
-      <div className="posts">
-        {this.state.post && (
-          <form onSubmit={this.handleSubmit}>
-            <FormGroup controlId="content">
-              <FormControl
-                onChange={this.handleChange}
-                value={this.state.content}
-                componentClass="textarea"
-              />
-            </FormGroup>
-            {this.state.post.attachment && (
-              <FormGroup>
-                <ControlLabel>Attachment</ControlLabel>
-                <FormControl.Static>
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={this.state.attachmentURL}
-                  >
-                    {this.formatFilename(this.state.post.attachment)}
-                  </a>
-                  <Image src={this.state.attachmentURL} />
-                </FormControl.Static>
-              </FormGroup>
-            )}
-            <FormGroup controlId="file">
-              {!this.state.post.attachment && (
-                <ControlLabel>Attachment</ControlLabel>
-              )}
-              <FormControl onChange={this.handleFileChange} type="file" />
-            </FormGroup>
-            <LoaderButton
-              block
-              bsStyle="primary"
-              bsSize="large"
-              disabled={!this.validateForm()}
-              type="submit"
-              isLoading={this.state.isLoading}
-              text="Save"
-              loadingText="Saving…"
-            />
-            <LoaderButton
-              block
-              bsStyle="danger"
-              bsSize="large"
-              isLoading={this.state.isDeleting}
-              onClick={this.handleDelete}
-              text="Delete"
-              loadingText="Deleting…"
-            />
-          </form>
-        )}
-      </div>
-    );
-  }
-}
+//     try {
+//       await this.deletepost();
+//       this.props.history.push('/');
+//     } catch (e) {
+//       alert(e);
+//       this.setState({ isDeleting: false });
+//     }
+//   };
+
+//   render() {
+//     return (
+//       <div className="posts">
+//         {this.state.post && (
+//           <form onSubmit={this.handleSubmit}>
+//             <FormGroup controlId="content">
+//               <FormControl
+//                 onChange={this.handleChange}
+//                 value={this.state.content}
+//                 componentClass="textarea"
+//               />
+//             </FormGroup>
+//             {this.state.post.attachment && (
+//               <FormGroup>
+//                 <ControlLabel>Attachment</ControlLabel>
+//                 <FormControl.Static>
+//                   <a
+//                     target="_blank"
+//                     rel="noopener noreferrer"
+//                     href={this.state.attachmentURL}
+//                   >
+//                     {this.formatFilename(this.state.post.attachment)}
+//                   </a>
+//                   <Image src={this.state.attachmentURL} />
+//                 </FormControl.Static>
+//               </FormGroup>
+//             )}
+//             <FormGroup controlId="file">
+//               {!this.state.post.attachment && (
+//                 <ControlLabel>Attachment</ControlLabel>
+//               )}
+//               <FormControl onChange={this.handleFileChange} type="file" />
+//             </FormGroup>
+//             <LoaderButton
+//               block
+//               bsStyle="primary"
+//               bsSize="large"
+//               disabled={!this.validateForm()}
+//               type="submit"
+//               isLoading={this.state.isLoading}
+//               text="Save"
+//               loadingText="Saving…"
+//             />
+//             <LoaderButton
+//               block
+//               bsStyle="danger"
+//               bsSize="large"
+//               isLoading={this.state.isDeleting}
+//               onClick={this.handleDelete}
+//               text="Delete"
+//               loadingText="Deleting…"
+//             />
+//           </form>
+//         )}
+//       </div>
+//     );
+//   }
+// }
