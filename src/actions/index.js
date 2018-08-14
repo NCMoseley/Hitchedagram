@@ -1,5 +1,6 @@
-import axios from 'axios';
-import { API, Storage } from 'aws-amplify';
+// import axios from 'axios';
+import { API } from 'aws-amplify';
+// import { API, Storage } from 'aws-amplify';
 
 export const FETCH_POSTS = 'FETCH_POSTS';
 export const FETCH_POST = 'FETCH_POST';
@@ -12,7 +13,7 @@ export function getPost(props) {
 
 // export function getPost(props) {
 //   const request = API.get('posts', `/posts/${props.match.params.id}`);
-//   console.log(request);
+//   console.log('getPost in actions index.js', request);
 //   return {
 //     type: FETCH_POSTS,
 //     payload: request

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import './phonebody.css';
 // import posts from '../data/posts';
 // import filters from '../data/filters';
-import Post from './Post';
+// import Post from './Post';
+import Posts from './Posts';
 import Loader from './Loader.js';
 
 class PhoneBody extends Component {
@@ -22,7 +23,7 @@ class PhoneBody extends Component {
     }
     return (
       <div className="phonebody">
-        <Post />
+        <Posts />
       </div>
     );
   }

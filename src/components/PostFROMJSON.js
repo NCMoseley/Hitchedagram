@@ -8,7 +8,7 @@ class Post extends Component {
     super(props);
 
     this.state = {};
-    console.log(posts);
+    console.log('from local json', posts);
 
     this.like = this.like.bind(this);
   }

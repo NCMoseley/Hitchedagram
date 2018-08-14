@@ -34,7 +34,6 @@ export default class NewPost extends Component {
 
   handleSubmit = async event => {
     event.preventDefault();
-
     if (this.file && this.file.size > config.MAX_ATTACHMENT_SIZE) {
       alert(
         `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE /
@@ -42,15 +41,14 @@ export default class NewPost extends Component {
       );
       return;
     }
-
     this.setState({ isLoading: true });
-
     try {
       const attachment = this.file ? await s3Upload(this.file) : null;
-
+      console.log(attachment);
       await this.createPost({
         attachment,
-        content: this.state.content
+        content: this.state.content,
+        likes: 0
       });
       this.props.history.push('/');
     } catch (e) {

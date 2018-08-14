@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import Amplify from 'aws-amplify';
-import config from './config';
 import { BrowserRouter as Router } from 'react-router-dom';
+
+import config from './config';
+import reducers from './reducers';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
@@ -32,9 +36,11 @@ Amplify.configure({
 });
 
 ReactDOM.render(
-  <Router>
-    <App />
-  </Router>,
+  <Provider store={createStore(reducers, {})}>
+    <Router>
+      <App />
+    </Router>
+  </Provider>,
   document.getElementById('root')
 );
 registerServiceWorker();

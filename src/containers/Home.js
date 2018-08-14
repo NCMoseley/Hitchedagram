@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { PageHeader, ListGroup, ListGroupItem, Image } from 'react-bootstrap';
 import { API, Storage } from 'aws-amplify';
 import './home.css';
-import { s3Fetch } from '../libs/awsLib';
 
 export default class Home extends Component {
   constructor(props) {
@@ -21,8 +20,14 @@ export default class Home extends Component {
     }
     try {
       const posts = await this.posts();
+      const postsWithImages = await Promise.all(
+        posts.map(async post => {
+          const image = await this.getImage(post.attachment);
+          return { ...post, image };
+        })
+      );
       this.setState({
-        posts
+        postsWithImages
       });
     } catch (e) {
       alert(e);
@@ -34,15 +39,16 @@ export default class Home extends Component {
     return API.get('posts', '/posts');
   }
 
+  // note
   async getImage(attachment) {
-    const image = await Storage.vault.get(attachment);
-    console.log(image);
+    const image = await Storage.get(attachment);
+    console.log('getImage', image);
     return image;
   }
 
-  renderpostsList(posts) {
-    console.log(posts);
-    return [{}].concat(posts).map(
+  renderpostsList(postsWithImages) {
+    console.log(postsWithImages);
+    return [{}].concat(postsWithImages).map(
       (post, i) =>
         i !== 0 ? (
           <ListGroupItem
@@ -51,7 +57,7 @@ export default class Home extends Component {
             onClick={this.handlepostClick}
             header={post.content.trim().split('\n')[0]}
           >
-            <Image src={this.getImage(post.attachment)} />
+            <Image key={post.postId} crossOrigin="anonymous" src={post.image} />
             {'Created: ' + new Date(post.createdAt).toLocaleString()}
           </ListGroupItem>
         ) : (
@@ -87,7 +93,8 @@ export default class Home extends Component {
       <div className="posts">
         <PageHeader>Your posts</PageHeader>
         <ListGroup>
-          {!this.state.isLoading && this.renderpostsList(this.state.posts)}
+          {!this.state.isLoading &&
+            this.renderpostsList(this.state.postsWithImages)}
         </ListGroup>
       </div>
     );
