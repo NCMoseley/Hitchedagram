@@ -3,8 +3,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Nav, Navbar, NavItem } from 'react-bootstrap';
 import './app.css';
-import ScreenBody from './components/ScreenBody.js';
-import Popup from './components/PopUp.js';
+// import ScreenBody from '../spare/ScreenBody';
+// import Popup from './components/PopUp.js';
 import Routes from './Routes';
 import { Auth } from 'aws-amplify';
 
@@ -88,7 +88,7 @@ class App extends Component {
 
           <Routes childProps={childProps} />
 
-          <ScreenBody />
+          {/* <ScreenBody /> */}
           <div className="phone-footer">
             <div onClick={this.goToProfile} className="home-cta">
               <i className="fas fa-home fa-lg cursor" />

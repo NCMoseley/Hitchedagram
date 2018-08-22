@@ -8,6 +8,7 @@ import Login from './containers/Login';
 import Signup from './containers/Signup';
 import NewPost from './containers/NewPost';
 import Profile from './containers/Profile';
+// import editProfile from './screens/EditProfile';
 import Posts from './containers/Posts';
 import NotFound from './containers/NotFound';
 
@@ -58,6 +59,12 @@ export default ({ childProps }) => {
         component={Profile}
         props={childProps}
       />
+      {/* <AuthenticatedRoute
+        path="/editprofile"
+        exact
+        component={editProfile}
+        props={childProps}
+      /> */}
       {/* Finally, catch all unmatched routes */}
       <Route component={NotFound} />
     </Switch>

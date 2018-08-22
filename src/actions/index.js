@@ -8,11 +8,11 @@ export const CREATE_POST = 'CREATE_POST';
 export const DELETE_POST = 'DELETE_POST';
 
 export function getPost(props) {
-  return API.get('posts', `/posts/${props.match.params.id}`);
+  return API.get('HitchedagramAPI', `/posts/${props.match.params.id}`);
 }
 
 // export function getPost(props) {
-//   const request = API.get('posts', `/posts/${props.match.params.id}`);
+//   const request = API.get('HitchedagramAPI', `/posts/${props.match.params.id}`);
 //   console.log('getPost in actions index.js', request);
 //   return {
 //     type: FETCH_POSTS,

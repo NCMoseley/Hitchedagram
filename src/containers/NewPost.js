@@ -60,7 +60,7 @@ export default class NewPost extends Component {
   };
 
   createPost(post) {
-    return API.post('posts', '/posts', {
+    return API.post('HitchedagramAPI', '/posts', {
       body: post
     });
   }

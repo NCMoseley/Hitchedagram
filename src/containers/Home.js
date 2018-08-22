@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { PageHeader, ListGroup, ListGroupItem, Image } from 'react-bootstrap';
+import { ListGroup, Image } from 'react-bootstrap';
 import { API, Storage } from 'aws-amplify';
 
 import _ from 'lodash';
@@ -15,6 +15,7 @@ export default class Home extends Component {
     };
     this.getImage = this.getImage.bind(this);
     this.like = this.like.bind(this);
+    console.log(API);
   }
 
   async componentDidMount() {
@@ -39,7 +40,7 @@ export default class Home extends Component {
   }
 
   posts() {
-    return API.get('posts', '/posts');
+    return API.get('HitchedagramAPI', '/all');
   }
 
   // note
@@ -105,7 +106,8 @@ export default class Home extends Component {
                 {post.likes} likes
               </p>
               <p key={post.length} className="caption">
-                <span>{post.userId}:</span> {post.content}
+                <span>{post.userId}:</span>
+                {post.content}
               </p>
             </div>
           </ListGroup>

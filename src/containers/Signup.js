@@ -43,9 +43,7 @@ export default class Signup extends Component {
 
   handleSubmit = async event => {
     event.preventDefault();
-
     this.setState({ isLoading: true });
-
     try {
       const newUser = await Auth.signUp({
         username: this.state.email,
@@ -56,10 +54,10 @@ export default class Signup extends Component {
       });
     } catch (e) {
       // Note:
-      // if (e.UsernameExistsException) {
-      //   console.log(this.props.UsernameExistsException);
-      //   Auth.resendSignUp(this.state.email);
-      // }
+      if (e.UsernameExistsException) {
+        console.log(this.props.UsernameExistsException);
+        Auth.resendSignUp(this.state.email);
+      }
       alert(e.message);
     }
 
@@ -68,13 +66,10 @@ export default class Signup extends Component {
 
   handleConfirmationSubmit = async event => {
     event.preventDefault();
-
     this.setState({ isLoading: true });
-
     try {
       await Auth.confirmSignUp(this.state.email, this.state.confirmationCode);
       await Auth.signIn(this.state.email, this.state.password);
-
       this.props.userHasAuthenticated(true);
       this.props.history.push('/');
     } catch (e) {
@@ -158,5 +153,13 @@ export default class Signup extends Component {
           : this.renderConfirmationForm()}
       </div>
     );
+  }
+}
+
+export function newUser(newUser) {
+  console.log(this.state.newUser);
+  if (this.state.newUser !== null) {
+    const loggedInUser = this.state.newUser;
+    return loggedInUser;
   }
 }

@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import Amplify from 'aws-amplify';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import Store from '../src/redux/store';
 import config from './config';
-import reducers from './reducers';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import './index.css';
@@ -27,7 +26,7 @@ Amplify.configure({
   API: {
     endpoints: [
       {
-        name: 'posts',
+        name: 'HitchedagramAPI',
         endpoint: config.apiGateway.URL,
         region: config.apiGateway.REGION
       }
@@ -36,7 +35,7 @@ Amplify.configure({
 });
 
 ReactDOM.render(
-  <Provider store={createStore(reducers, {})}>
+  <Provider store={Store}>
     <Router>
       <App />
     </Router>

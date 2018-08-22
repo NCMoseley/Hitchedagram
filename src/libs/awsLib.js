@@ -9,9 +9,3 @@ export async function s3Upload(file) {
 
   return stored.key;
 }
-
-// export async function s3Fetch(attachment) {
-//   const image = await Storage.vault.get();
-//   console.log(image);
-//   return image;
-// }

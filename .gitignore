@@ -17,6 +17,7 @@
 .env.production.local
 config.js
 questions.md
+spare
 
 npm-debug.log*
 yarn-debug.log*

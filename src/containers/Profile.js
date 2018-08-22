@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { PageHeader, ListGroup, ListGroupItem, Image } from 'react-bootstrap';
 import { API, Storage } from 'aws-amplify';
 
-import _ from 'lodash';
-import './home.css';
+// import _ from 'lodash';
+import './profile.css';
 
 export default class Home extends Component {
   constructor(props) {
@@ -14,6 +14,7 @@ export default class Home extends Component {
       posts: []
     };
     this.getImage = this.getImage.bind(this);
+    console.log(this.props);
   }
 
   async componentDidMount() {
@@ -38,28 +39,22 @@ export default class Home extends Component {
   }
 
   posts() {
-    return API.get('posts', '/posts');
+    // const currentUserId =
+    //   Auth._storage[
+    //     'aws.cognito.identity-id.us-east-2:6730df8d-ac6a-4cc3-92cf-c464462c7656'
+    //   ];
+    return API.get('HitchedagramAPI', '/posts');
   }
 
-  // note
   async getImage(attachment) {
     const image = await Storage.get(attachment);
-    console.log('getImage', image);
+    // console.log('getImage', image);
     return image;
   }
 
-  like(userId) {
-    // eslint-disable-next-line
-    const thisPost = posts.find(post => post.userId === userId);
-    // eslint-disable-next-line
-    const liked = thisPost.hasBeenLiked ? thisPost.likes-- : thisPost.likes++;
-    thisPost.hasBeenLiked = !thisPost.hasBeenLiked;
-
-    this.forceUpdate();
-  }
-
   renderpostsList(postsWithImages) {
-    console.log(postsWithImages);
+    // console.log(postsWithImages);
+    // const myPost = postsWithImages.map(post => post.userId === userId);
     return [{}].concat(postsWithImages).map(
       (post, i) =>
         i !== 0 ? (
@@ -71,19 +66,6 @@ export default class Home extends Component {
           >
             <Image key={post.postId} crossOrigin="anonymous" src={post.image} />
             {'Created: ' + new Date(post.createdAt).toLocaleString()}
-            <div className="heart">
-              {post.hasBeenLiked ? (
-                <i
-                  onClick={_.partial(this.like, post.userId)}
-                  className="fas fa-heart fa-lg red"
-                />
-              ) : (
-                <i
-                  onClick={_.partial(this.like, post.userId)}
-                  className="far fa-heart fa-lg"
-                />
-              )}
-            </div>
           </ListGroupItem>
         ) : (
           <ListGroupItem
