@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import auth from './auth';
 import postsReducer from '../store/modules/home';
-import countReducer from '../reducers/CountReducer';
+import CountReducer from '../reducers/CountReducer';
 
 export default combineReducers({
   auth,
-  countReducer,
+  CountReducer,
   posts: postsReducer
 });

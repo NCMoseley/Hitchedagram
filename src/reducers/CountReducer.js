@@ -8,9 +8,9 @@ export default function CountReducer(
   const count = state.count;
   const wish_value = action.wish_value;
   switch (action.type) {
-    case 'increase':
+    case 'INCREASE':
       return { count: Number(count) + 1 };
-    case 'update':
+    case 'UPDATE':
       return {
         count: wish_value
       };

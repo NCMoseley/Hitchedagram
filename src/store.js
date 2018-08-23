@@ -1,11 +1,13 @@
-import { createStore, applyMiddleware } from 'redux';
-import reducers from './reducers/index';
+import { createStore, applyMiddleware, compose } from 'redux';
+import reducer from './reducers/index';
 import async from './middlewares/async.js';
 
-const initialState = {
-  countReducer: { count: 123, wish_value: 12 }
-};
+const initialState = { CountReducer: { count: 123, wish_value: 12 } };
 
-const store = createStore((reducers, initialState), applyMiddleware(async));
+// strange syntax used to allow initialState call
+
+const createFinalStore = compose(applyMiddleware(async))(createStore);
+
+const store = createFinalStore(reducer, initialState);
 
 export default store;
