@@ -1,16 +1,10 @@
 import { combineReducers } from 'redux';
 import auth from './auth';
+import postsReducer from '../store/modules/home';
+import countReducer from '../reducers/CountReducer';
 
 export default combineReducers({
-  auth
+  auth,
+  countReducer,
+  posts: postsReducer
 });
-
-// import { reducer as formReducer } from "redux-form";
-// import PostsReducer from './reducer_posts';
-
-// const rootReducer = combineReducers({
-//   posts: PostsReducer
-//   // form: formReducer
-// });
-
-// export default rootReducer;

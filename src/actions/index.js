@@ -2,6 +2,7 @@
 import { API } from 'aws-amplify';
 // import { API, Storage } from 'aws-amplify';
 
+export const FETCH_ALL = 'FETCH_ALL';
 export const FETCH_POSTS = 'FETCH_POSTS';
 export const FETCH_POST = 'FETCH_POST';
 export const CREATE_POST = 'CREATE_POST';
@@ -11,14 +12,14 @@ export function getPost(props) {
   return API.get('HitchedagramAPI', `/posts/${props.match.params.id}`);
 }
 
-// export function getPost(props) {
-//   const request = API.get('HitchedagramAPI', `/posts/${props.match.params.id}`);
-//   console.log('getPost in actions index.js', request);
-//   return {
-//     type: FETCH_POSTS,
-//     payload: request
-//   };
-// }
+export function getAll(props) {
+  const request = API.get('HitchedagramAPI', '/all');
+  console.log('getPost in actions index.js', request);
+  return {
+    type: FETCH_ALL,
+    payload: request
+  };
+}
 
 // From Blog-Redux project Note:
 

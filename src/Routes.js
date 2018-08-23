@@ -1,7 +1,5 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { createStore, applyMiddleware } from 'redux';
-import reducers from './reducers/index';
 
 import Home from './containers/Home';
 import Login from './containers/Login';
@@ -15,17 +13,17 @@ import NotFound from './containers/NotFound';
 import AppliedRoute from './components/AppliedRoute';
 import AuthenticatedRoute from './components/AuthenticatedRoute';
 import UnauthenticatedRoute from './components/UnauthenticatedRoute';
-import async from './middlewares/async.js';
+
+// if required in applied route
+// import store from './store';
 
 export default ({ childProps }) => {
-  const store = createStore(reducers, applyMiddleware(async));
-
   return (
     <Switch>
       <AppliedRoute
         path="/"
         exact
-        store={store}
+        // store={store}
         component={Home}
         props={childProps}
       />
