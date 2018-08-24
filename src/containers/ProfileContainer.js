@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PageHeader, ListGroup, ListGroupItem, Image } from 'react-bootstrap';
-import { API, Storage } from 'aws-amplify';
+import { Storage } from 'aws-amplify';
 
 import Profile2 from '../components/Profile2';
 import * as actions from '../actions';
@@ -10,12 +10,12 @@ import { getPosts } from '../actions/getPosts';
 class ProfileContainer extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       isLoading: true,
       posts: []
     };
     this.getImage = this.getImage.bind(this);
+    console.log('this.props from ProfileContainer', this.props);
   }
 
   async componentDidMount() {
@@ -23,9 +23,8 @@ class ProfileContainer extends Component {
       return;
     }
     try {
-      console.log(this.props);
-      const posts = await this.props.getPosts();
-      // const posts = await this.posts();
+      await this.props.getPosts();
+      const posts = this.props.posts;
       const postsWithImages = await Promise.all(
         posts.map(async post => {
           const image = await this.getImage(post.attachment);
@@ -41,19 +40,14 @@ class ProfileContainer extends Component {
     this.setState({ isLoading: false });
   }
 
-  posts() {
-    return API.get('HitchedagramAPI', '/posts');
-  }
-
   async getImage(attachment) {
     const image = await Storage.get(attachment);
-    // console.log('getImage', image);
     return image;
   }
 
   renderpostsList(postsWithImages) {
-    // console.log(postsWithImages);
-    // const myPost = postsWithImages.map(post => post.userId === userId);
+    console.log('posts with images', postsWithImages);
+
     return [{}].concat(postsWithImages).map(
       (post, i) =>
         i !== 0 ? (
@@ -89,7 +83,7 @@ class ProfileContainer extends Component {
     return (
       <div className="lander">
         <h1>Hitchedagram</h1>
-        <p>A simple photo uploading app for guests</p>
+        <p>A simple photo uploading app for wedding guests</p>
       </div>
     );
   }
@@ -109,7 +103,7 @@ class ProfileContainer extends Component {
 
   render() {
     return (
-      <div className="home">
+      <div className="profile">
         {this.props.isAuthenticated ? this.renderposts() : this.renderLander()}
       </div>
     );
@@ -119,8 +113,9 @@ class ProfileContainer extends Component {
 // Map redux state to component props
 function mapStateToProps(state) {
   return {
-    count: state.CountReducer.count,
-    wish_value: state.CountReducer.wish_value
+    count: state.countReducer.count,
+    wish_value: state.countReducer.wish_value,
+    posts: state.postsReducer.posts
   };
 }
 

@@ -1,18 +1,16 @@
-export default function CountReducer(
+export default function countReducer(
   state = {
     count: 0,
     wish_value: 0
   },
   action
 ) {
-  const count = state.count;
-  const wish_value = action.wish_value;
   switch (action.type) {
     case 'INCREASE':
-      return { count: Number(count) + 1 };
+      return { count: Number(state.count) + 1 };
     case 'UPDATE':
       return {
-        count: wish_value
+        count: action.wish_value
       };
     default:
       return state;

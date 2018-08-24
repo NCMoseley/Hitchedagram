@@ -15,7 +15,6 @@ export default class Home extends Component {
     };
     this.getImage = this.getImage.bind(this);
     this.like = this.like.bind(this);
-    console.log(API);
   }
 
   async componentDidMount() {
