@@ -1,27 +1,43 @@
-import { API } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
 import * as type from '../actions/actionTypes';
 
 // Action Creators
-const getPostsSuccess = posts => ({
+const getAllSuccess = posts => ({
   type: type.GET_ALL_SUCCESS,
   payload: posts
 });
-const getPostsError = error => ({
+const getAllError = error => ({
   type: type.GET_ALL_FAILURE,
   payload: error
 });
 
 // Async Action Creator
-export function getPosts() {
-  return function action(dispatch) {
+export function getAll() {
+  return async function action(dispatch) {
     dispatch({ type: type.GET_ALL_SUCCESS });
-    const request = API.get('HitchedagramAPI', '/all');
-    console.log('getAll in actions/getAll.js', request);
-    return request.then(
-      response => dispatch(getPostsSuccess(response)),
-      err => dispatch(getPostsError(err))
-    );
+    try {
+      const request = await API.get('HitchedagramAPI', '/all').then(r => {
+        return r;
+      });
+      // console.log('getAll in actions/getAll.js', request);
+      const posts = request;
+      const postsWithImages = await Promise.all(
+        posts.map(async post => {
+          const image = await getImage(post.attachment);
+          return { ...post, image };
+        })
+      );
+      dispatch(getAllSuccess(postsWithImages));
+    } catch (e) {
+      alert(e);
+      dispatch(getAllError(e));
+    }
   };
+}
+
+async function getImage(attachment) {
+  const image = await Storage.get(attachment);
+  return image;
 }
 
 //Reducer

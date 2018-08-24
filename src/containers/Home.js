@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { ListGroup, Image } from 'react-bootstrap';
-import { API, Storage } from 'aws-amplify';
-
 import _ from 'lodash';
+
+import { getAll } from '../actions/getAll';
 import './home.css';
 
-export default class Home extends Component {
+class Home extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       isLoading: true,
       posts: []
     };
-    this.getImage = this.getImage.bind(this);
     this.like = this.like.bind(this);
   }
 
@@ -22,13 +21,9 @@ export default class Home extends Component {
       return;
     }
     try {
-      const posts = await this.posts();
-      const postsWithImages = await Promise.all(
-        posts.map(async post => {
-          const image = await this.getImage(post.attachment);
-          return { ...post, image };
-        })
-      );
+      // console.log('home', this.props);
+      await this.props.getAll();
+      const postsWithImages = this.props.posts;
       this.setState({
         postsWithImages
       });
@@ -36,17 +31,6 @@ export default class Home extends Component {
       alert(e);
     }
     this.setState({ isLoading: false });
-  }
-
-  posts() {
-    return API.get('HitchedagramAPI', '/all');
-  }
-
-  // note
-  async getImage(attachment) {
-    const image = await Storage.get(attachment);
-    // console.log('getImage', image);
-    return image;
   }
 
   like(userId) {
@@ -148,3 +132,23 @@ export default class Home extends Component {
     );
   }
 }
+
+// Map redux state to component props
+function mapStateToProps(state) {
+  return {
+    posts: state.allPostsReducer.posts
+  };
+}
+
+// Map redux actions to component props
+function mapDispatchToProps(dispatch) {
+  return {
+    getAll: () => dispatch(getAll())
+  };
+}
+
+// Connected Component
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home);

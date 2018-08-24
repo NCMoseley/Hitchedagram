@@ -1,5 +1,6 @@
 import { API, Storage } from 'aws-amplify';
 import * as type from '../actions/actionTypes';
+
 // Action Creators
 const getPostsSuccess = posts => ({
   type: type.GET_POSTS_SUCCESS,

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PageHeader, ListGroup, ListGroupItem, Image } from 'react-bootstrap';
-import { Storage } from 'aws-amplify';
 
 import Profile2 from '../components/Profile2';
 import * as actions from '../actions';
@@ -34,8 +33,6 @@ class ProfileContainer extends Component {
   }
 
   renderpostsList(postsWithImages) {
-    console.log('posts with images', postsWithImages);
-
     return [{}].concat(postsWithImages).map(
       (post, i) =>
         i !== 0 ? (
