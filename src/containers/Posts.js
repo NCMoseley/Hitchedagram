@@ -6,14 +6,11 @@ import config from '../config';
 import { s3Upload } from '../libs/awsLib';
 
 import './posts.css';
-import { getPost } from '../actions';
 
 export default class posts extends Component {
   constructor(props) {
     super(props);
-
     this.file = null;
-
     this.state = {
       isLoading: null,
       isDeleting: null,
@@ -21,14 +18,14 @@ export default class posts extends Component {
       content: '',
       attachmentURL: null
     };
+    this.getPost = this.getPost.bind(this);
   }
 
   async componentDidMount() {
     try {
       let attachmentURL;
-      const post = await getPost(this.props);
+      const post = await this.getPost(this.props);
       const { content, attachment } = post;
-
       if (attachment) {
         attachmentURL = await Storage.vault.get(attachment);
       }
@@ -43,7 +40,7 @@ export default class posts extends Component {
     }
   }
 
-  getpost() {
+  getPost() {
     return API.get('HitchedagramAPI', `/posts/${this.props.match.params.id}`);
   }
 

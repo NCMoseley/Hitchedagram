@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { ListGroup, Image } from 'react-bootstrap';
 import _ from 'lodash';
 
+import { increaseLikes, toggleLike } from '../actions/likes';
 import { getAll } from '../actions/getAll';
 import './home.css';
 
@@ -21,8 +22,8 @@ class Home extends Component {
       return;
     }
     try {
-      // console.log('home', this.props);
       await this.props.getAll();
+      console.log('home', this.props);
       const postsWithImages = this.props.posts;
       this.setState({
         postsWithImages
@@ -34,14 +35,11 @@ class Home extends Component {
   }
 
   like(userId) {
-    // eslint-disable-next-line
     const thisPost = this.state.postsWithImages.find(
       post => post.userId === userId
     );
-    // eslint-disable-next-line
-    const liked = thisPost.hasBeenLiked ? thisPost.likes-- : thisPost.likes++;
-    thisPost.hasBeenLiked = !thisPost.hasBeenLiked;
-
+    this.props.increaseLikes(userId, thisPost);
+    this.props.toggleLike(userId, thisPost);
     this.forceUpdate();
   }
 
@@ -141,11 +139,14 @@ function mapStateToProps(state) {
 }
 
 // Map redux actions to component props
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = dispatch => {
   return {
-    getAll: () => dispatch(getAll())
+    getAll: () => dispatch(getAll()),
+    increaseLikes: (userId, thisPost) =>
+      dispatch(increaseLikes(userId, thisPost)),
+    toggleLike: (userId, thisPost) => dispatch(toggleLike(userId, thisPost))
   };
-}
+};
 
 // Connected Component
 export default connect(

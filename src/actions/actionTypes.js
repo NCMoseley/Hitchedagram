@@ -10,5 +10,5 @@ export const GET_ALL = 'GET_POSTS';
 export const GET_ALL_SUCCESS = 'GET_ALL_SUCCESS';
 export const GET_ALL_FAILURE = 'GET_ALL_FAILURE';
 
-export const INCREASE = 'INCREASE';
-export const UPDATE = 'UPDATE';
+export const INCREASE_LIKES = 'INCREASE_LIKES';
+export const TOGGLE_LIKE = 'TOGGLE_LIKE';

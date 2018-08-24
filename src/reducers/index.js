@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import postsReducer from '../actions/getPosts';
 import allPostsReducer from '../actions/getAll';
-import countReducer from './countReducer';
+import likeReducer from '../actions/likes';
 
 export default combineReducers({
-  countReducer,
+  likeReducer,
   postsReducer,
   allPostsReducer
 });
