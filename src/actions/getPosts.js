@@ -1,4 +1,4 @@
-import { API } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
 import * as type from '../actions/actionTypes';
 // Action Creators
 const getPostsSuccess = posts => ({
@@ -12,15 +12,31 @@ const getPostsError = error => ({
 
 // Async Action Creator
 export function getPosts() {
-  return function action(dispatch) {
+  return async function action(dispatch) {
     dispatch({ type: type.GET_POSTS_SUCCESS });
-    const request = API.get('HitchedagramAPI', '/posts');
-    // console.log('getPosts in actions/getPosts.js', request);
-    return request.then(
-      response => dispatch(getPostsSuccess(response)),
-      err => dispatch(getPostsError(err))
-    );
+    try {
+      const request = await API.get('HitchedagramAPI', '/posts').then(r => {
+        return r;
+      });
+      // console.log('getPosts in actions/getPosts.js', request);
+      const posts = request;
+      const postsWithImages = await Promise.all(
+        posts.map(async post => {
+          const image = await getImage(post.attachment);
+          return { ...post, image };
+        })
+      );
+      dispatch(getPostsSuccess(postsWithImages));
+    } catch (e) {
+      alert(e);
+      dispatch(getPostsError(e));
+    }
   };
+}
+
+async function getImage(attachment) {
+  const image = await Storage.get(attachment);
+  return image;
 }
 
 //Reducer

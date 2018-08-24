@@ -14,8 +14,7 @@ class ProfileContainer extends Component {
       isLoading: true,
       posts: []
     };
-    this.getImage = this.getImage.bind(this);
-    console.log('this.props from ProfileContainer', this.props);
+    // console.log('this.props from ProfileContainer constructor', this.props);
   }
 
   async componentDidMount() {
@@ -24,13 +23,7 @@ class ProfileContainer extends Component {
     }
     try {
       await this.props.getPosts();
-      const posts = this.props.posts;
-      const postsWithImages = await Promise.all(
-        posts.map(async post => {
-          const image = await this.getImage(post.attachment);
-          return { ...post, image };
-        })
-      );
+      const postsWithImages = this.props.posts;
       this.setState({
         postsWithImages
       });
@@ -38,11 +31,6 @@ class ProfileContainer extends Component {
       alert(e);
     }
     this.setState({ isLoading: false });
-  }
-
-  async getImage(attachment) {
-    const image = await Storage.get(attachment);
-    return image;
   }
 
   renderpostsList(postsWithImages) {
