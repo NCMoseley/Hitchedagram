@@ -3,14 +3,19 @@ import * as type from './actionTypes';
 
 //Action Creator
 
-export const increaseLikes = (userId, thisPost) => {
-  const likes = thisPost.likes++;
+export const increaseLikes = thisPost => {
+  let likes;
+  if (thisPost.hasBeenLiked === false) {
+    likes = thisPost.likes++;
+  } else {
+    likes = thisPost.likes--;
+  }
   return {
     type: type.INCREASE_LIKES,
     payload: likes
   };
 };
-export const toggleLike = (userId, thisPost) => {
+export const toggleLike = thisPost => {
   let toggleLike;
   if (thisPost.hasBeenLiked === false) {
     toggleLike = thisPost.hasBeenLiked = true;
@@ -25,10 +30,10 @@ export const toggleLike = (userId, thisPost) => {
 
 export default (state = {}, action) => {
   switch (action.type) {
-    case 'INCREASE_LIKE':
+    case 'INCREASE_LIKES':
+      console.log(state);
       return { ...state, likes: action.payload };
     case 'TOGGLE_LIKE':
-      console.log(state);
       return {
         ...state,
         hasBeenLiked: action.payload

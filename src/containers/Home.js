@@ -38,8 +38,8 @@ class Home extends Component {
     const thisPost = this.state.postsWithImages.find(
       post => post.userId === userId
     );
-    this.props.increaseLikes(userId, thisPost);
-    this.props.toggleLike(userId, thisPost);
+    this.props.increaseLikes(thisPost);
+    this.props.toggleLike(thisPost);
     this.forceUpdate();
   }
 
@@ -142,9 +142,8 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => {
   return {
     getAll: () => dispatch(getAll()),
-    increaseLikes: (userId, thisPost) =>
-      dispatch(increaseLikes(userId, thisPost)),
-    toggleLike: (userId, thisPost) => dispatch(toggleLike(userId, thisPost))
+    increaseLikes: thisPost => dispatch(increaseLikes(thisPost)),
+    toggleLike: thisPost => dispatch(toggleLike(thisPost))
   };
 };
 
