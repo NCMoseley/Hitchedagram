@@ -5,7 +5,7 @@ import * as type from '../../actions/actionTypes';
 
 //Action Creators
 
-const getAllPosts = posts => ({ type: type.FETCH_ALL, payload: posts });
+// const getAllPosts = posts => ({ type: type.FETCH_ALL, payload: posts });
 
 export function fetchAll() {
   const request = API.get('HitchedagramAPI', '/all');

@@ -5,7 +5,7 @@ import { API, Storage } from 'aws-amplify';
 // import _ from 'lodash';
 import './profile.css';
 
-export default class Home extends Component {
+export default class Profile extends Component {
   constructor(props) {
     super(props);
 
