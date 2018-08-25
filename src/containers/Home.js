@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ListGroup, Image } from 'react-bootstrap';
 import _ from 'lodash';
+import { Auth } from 'aws-amplify';
 
-import { increaseLikes, toggleLike } from '../actions/likes';
+import { increaseLikes, toggleLike, whoLiked } from '../actions/likes';
 import { getAll } from '../actions/getAll';
 import './home.css';
 
@@ -23,7 +24,13 @@ class Home extends Component {
     }
     try {
       await this.props.getAll();
-      console.log('home', this.props);
+      console.log('componentDidMount', this.props.posts);
+      // console.log(
+      //   'home',
+      //   Auth._storage[
+      //     'aws.cognito.identity-id.us-east-2:6730df8d-ac6a-4cc3-92cf-c464462c7656'
+      //   ]
+      // );
       const postsWithImages = this.props.posts;
       this.setState({
         postsWithImages
@@ -35,11 +42,16 @@ class Home extends Component {
   }
 
   like(userId) {
+    const currentUserId =
+      Auth._storage[
+        'aws.cognito.identity-id.us-east-2:6730df8d-ac6a-4cc3-92cf-c464462c7656'
+      ];
     const thisPost = this.state.postsWithImages.find(
       post => post.userId === userId
     );
-    this.props.increaseLikes(thisPost);
+    this.props.whoLiked(thisPost, currentUserId);
     this.props.toggleLike(thisPost);
+    this.props.increaseLikes(thisPost, currentUserId);
     this.forceUpdate();
   }
 
@@ -47,25 +59,18 @@ class Home extends Component {
     return (
       <div className="posts">
         {postsWithImages.map(post => (
-          <ListGroup key={post.userId} className="single-post">
-            <div key={post.userId} className="header level">
+          <ListGroup key={post.createdAt} className="single-post">
+            <div className="header level">
               <figure className="image is-32x32">
-                <img
-                  alt="gravatar"
-                  key={post.attachment}
-                  src={post.attachment}
-                />
+                <img alt="gravatar" src={post.attachment} />
               </figure>
-              <span key={post.userId} className="username">
-                {post.userId}
-              </span>
+              <span className="username">{post.userId}</span>
             </div>
 
             <div className="content">
               <Image
                 style={{ backgroundImage: `url(${post.attachment})` }}
                 className={`image-container ${post.filter}`}
-                key={post.postId}
                 onDoubleClick={_.partial(this.like, post.userId)}
                 crossOrigin="anonymous"
                 src={post.image}
@@ -83,10 +88,8 @@ class Home extends Component {
                   />
                 )}
               </div>
-              <p key={post.likes} className="likes">
-                {post.likes} likes
-              </p>
-              <p key={post.length} className="caption">
+              <p className="likes">{post.likes} likes</p>
+              <p className="caption">
                 <span>{post.userId}:</span>
                 {post.content}
               </p>
@@ -142,8 +145,11 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => {
   return {
     getAll: () => dispatch(getAll()),
-    increaseLikes: thisPost => dispatch(increaseLikes(thisPost)),
-    toggleLike: thisPost => dispatch(toggleLike(thisPost))
+    whoLiked: (thisPost, currentUserId) =>
+      dispatch(whoLiked(thisPost, currentUserId)),
+    toggleLike: thisPost => dispatch(toggleLike(thisPost)),
+    increaseLikes: (thisPost, currentUserId) =>
+      dispatch(increaseLikes(thisPost, currentUserId))
   };
 };
 

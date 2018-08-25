@@ -12,3 +12,4 @@ export const GET_ALL_FAILURE = 'GET_ALL_FAILURE';
 
 export const INCREASE_LIKES = 'INCREASE_LIKES';
 export const TOGGLE_LIKE = 'TOGGLE_LIKE';
+export const WHO_LIKED = 'WHO_LIKED';

@@ -1,18 +1,15 @@
-import { API } from 'aws-amplify';
 import * as type from './actionTypes';
 
 //Action Creator
-
-export const increaseLikes = thisPost => {
-  let likes;
-  if (thisPost.hasBeenLiked === false) {
-    likes = thisPost.likes++;
-  } else {
-    likes = thisPost.likes--;
+export const whoLiked = (thisPost, currentUserId) => {
+  let whoLiked;
+  if (!thisPost.whoLiked.includes(currentUserId)) {
+    return (whoLiked = thisPost.whoLiked.push(currentUserId));
   }
+  console.log(thisPost.whoLiked);
   return {
-    type: type.INCREASE_LIKES,
-    payload: likes
+    type: type.WHO_LIKED,
+    payload: whoLiked
   };
 };
 export const toggleLike = thisPost => {
@@ -27,6 +24,16 @@ export const toggleLike = thisPost => {
     payload: toggleLike
   };
 };
+export const increaseLikes = (thisPost, currentUserId) => {
+  let likes;
+  if (!thisPost.whoLiked.includes(currentUserId)) {
+    likes = thisPost.likes++;
+  }
+  return {
+    type: type.INCREASE_LIKES,
+    payload: likes
+  };
+};
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -37,6 +44,11 @@ export default (state = {}, action) => {
       return {
         ...state,
         hasBeenLiked: action.payload
+      };
+    case 'WHO_LIKED':
+      return {
+        ...state,
+        whoLiked: action.payload
       };
     default:
       return state;

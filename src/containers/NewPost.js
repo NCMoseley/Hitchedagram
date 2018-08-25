@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
-import LoaderButton from '../components/LoaderButton';
-import config from '../config';
 import { API } from 'aws-amplify';
+
+import config from '../config';
 import { s3Upload } from '../libs/awsLib';
+import LoaderButton from '../components/LoaderButton';
+import DropdownButton from '../components/DropdownButton';
 import './newPost.css';
 
 export default class NewPost extends Component {
@@ -14,7 +16,10 @@ export default class NewPost extends Component {
 
     this.state = {
       isLoading: null,
-      content: ''
+      content: '',
+      hasBeenLiked: false,
+      whoLiked: [],
+      filter: 'normal'
     };
   }
 
@@ -44,13 +49,13 @@ export default class NewPost extends Component {
     this.setState({ isLoading: true });
     try {
       const attachment = this.file ? await s3Upload(this.file) : null;
-      console.log(attachment);
       await this.createPost({
         attachment,
         content: this.state.content,
         likes: 0,
         hasBeenLiked: false,
-        filter: this.state.filter
+        whoLiked: [],
+        filter: 'normal'
       });
       this.props.history.push('/');
     } catch (e) {
@@ -90,6 +95,7 @@ export default class NewPost extends Component {
             text="Create"
             loadingText="Creating…"
           />
+          <DropdownButton />
         </form>
       </div>
     );

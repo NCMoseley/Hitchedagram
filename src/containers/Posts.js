@@ -25,6 +25,7 @@ export default class posts extends Component {
     try {
       let attachmentURL;
       const post = await this.getPost(this.props);
+
       const { content, attachment } = post;
       if (attachment) {
         attachmentURL = await Storage.vault.get(attachment);
