@@ -1,7 +1,7 @@
 {
   "name": "hitchedagram",
   "version": "0.1.0",
-  "homepage": "https://github.com/NCMoseley/Hitchedagram",
+  "homepage": "http://hitchedagram.s3-website.ca-central-1.amazonaws.com",
   "private": true,
   "license": "(MIT OR Apache-2.0)",
   "dependencies": {
