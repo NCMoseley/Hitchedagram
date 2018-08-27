@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { PageHeader, ListGroup, ListGroupItem, Image } from 'react-bootstrap';
 
 import Profile2 from '../components/Profile2';
-import { increaseLikes } from '../actions/likes';
+// import { increaseLikes } from '../actions/likes';
 import { getPosts } from '../actions/getPosts';
 
 class ProfileContainer extends Component {
@@ -107,7 +107,7 @@ function mapStateToProps(state) {
 // Map redux actions to component props
 function mapDispatchToProps(dispatch) {
   return {
-    onIncreaseClick: () => dispatch(increaseLikes()),
+    // onIncreaseClick: () => dispatch(increaseLikes()),
     // onUpdateClick: event => dispatch(actions.updateTodo(event.target.value)),
     getPosts: () => dispatch(getPosts())
   };

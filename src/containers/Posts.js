@@ -19,7 +19,6 @@ export default class posts extends Component {
       attachmentURL: null
     };
     this.getPost = this.getPost.bind(this);
-    console.log('this.props.match.params.id', this.props.match.params.id);
   }
 
   async componentDidMount() {

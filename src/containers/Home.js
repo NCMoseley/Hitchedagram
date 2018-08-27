@@ -13,14 +13,11 @@ class Home extends Component {
     super(props);
     this.state = {
       isLoading: true,
-      posts: []
+      postsWithImages: [],
+      currentUserId: ''
     };
-    this.like = this.like.bind(this);
-    // console.log(
-    //   Auth._storage[
-    //     'aws.cognito.identity-id.us-east-2:6730df8d-ac6a-4cc3-92cf-c464462c7656'
-    //   ]
-    // );
+    // this.like = this.like.bind(this);
+    // this.heartCount = this.like.heartCount(this);
   }
 
   async componentDidMount() {
@@ -30,15 +27,14 @@ class Home extends Component {
     try {
       await this.props.getAll();
       console.log('componentDidMount', this.props.posts);
-      // console.log(
-      //   'home',
-      //   Auth._storage[
-      //     'aws.cognito.identity-id.us-east-2:6730df8d-ac6a-4cc3-92cf-c464462c7656'
-      //   ]
-      // );
+      const currentUserId =
+        Auth._storage[
+          'aws.cognito.identity-id.us-east-2:6730df8d-ac6a-4cc3-92cf-c464462c7656'
+        ];
       const postsWithImages = this.props.posts;
       this.setState({
-        postsWithImages
+        postsWithImages,
+        currentUserId
       });
     } catch (e) {
       alert(e);
@@ -46,20 +42,17 @@ class Home extends Component {
     this.setState({ isLoading: false });
   }
 
-  like(postId) {
+  like = postId => {
     const currentUserId =
       Auth._storage[
         'aws.cognito.identity-id.us-east-2:6730df8d-ac6a-4cc3-92cf-c464462c7656'
       ];
-    console.log('currentUserId', currentUserId);
     const thisPost = this.state.postsWithImages.find(
       post => post.postId === postId
     );
     this.props.whoLiked(thisPost, currentUserId);
-    // this.props.toggleLike(thisPost);
-    // this.props.increaseLikes(thisPost, currentUserId);
     this.forceUpdate();
-  }
+  };
 
   renderpostsList(postsWithImages) {
     return (
@@ -82,7 +75,8 @@ class Home extends Component {
                 src={post.image}
               />
               <div className="heart">
-                {post.hasBeenLiked ? (
+                {post.whoLiked &&
+                post.whoLiked.includes(this.state.currentUserId) ? (
                   <i
                     onClick={_.partial(this.like, post.postId)}
                     className="fas fa-heart fa-lg red"
@@ -94,7 +88,9 @@ class Home extends Component {
                   />
                 )}
               </div>
-              <p className="likes">{post.likes} likes</p>
+              <p className="likes">
+                {post.whoLiked && post.whoLiked.length} likes
+              </p>
               <p className="caption">
                 <span>{post.userId}:</span>
                 {post.content}
