@@ -4,7 +4,7 @@ import { ListGroup, Image } from 'react-bootstrap';
 import _ from 'lodash';
 import { Auth } from 'aws-amplify';
 
-import { increaseLikes, toggleLike, whoLiked } from '../actions/likes';
+import { whoLiked } from '../actions/likes';
 import { getAll } from '../actions/getAll';
 import './home.css';
 
@@ -16,6 +16,11 @@ class Home extends Component {
       posts: []
     };
     this.like = this.like.bind(this);
+    // console.log(
+    //   Auth._storage[
+    //     'aws.cognito.identity-id.us-east-2:6730df8d-ac6a-4cc3-92cf-c464462c7656'
+    //   ]
+    // );
   }
 
   async componentDidMount() {
@@ -41,17 +46,18 @@ class Home extends Component {
     this.setState({ isLoading: false });
   }
 
-  like(userId) {
+  like(postId) {
     const currentUserId =
       Auth._storage[
         'aws.cognito.identity-id.us-east-2:6730df8d-ac6a-4cc3-92cf-c464462c7656'
       ];
+    console.log('currentUserId', currentUserId);
     const thisPost = this.state.postsWithImages.find(
-      post => post.userId === userId
+      post => post.postId === postId
     );
     this.props.whoLiked(thisPost, currentUserId);
-    this.props.toggleLike(thisPost);
-    this.props.increaseLikes(thisPost, currentUserId);
+    // this.props.toggleLike(thisPost);
+    // this.props.increaseLikes(thisPost, currentUserId);
     this.forceUpdate();
   }
 
@@ -71,19 +77,19 @@ class Home extends Component {
               <Image
                 style={{ backgroundImage: `url(${post.attachment})` }}
                 className={`image-container ${post.filter}`}
-                onDoubleClick={_.partial(this.like, post.userId)}
+                onDoubleClick={_.partial(this.like, post.postId)}
                 crossOrigin="anonymous"
                 src={post.image}
               />
               <div className="heart">
                 {post.hasBeenLiked ? (
                   <i
-                    onClick={_.partial(this.like, post.userId)}
+                    onClick={_.partial(this.like, post.postId)}
                     className="fas fa-heart fa-lg red"
                   />
                 ) : (
                   <i
-                    onClick={_.partial(this.like, post.userId)}
+                    onClick={_.partial(this.like, post.postId)}
                     className="far fa-heart fa-lg"
                   />
                 )}
@@ -146,10 +152,10 @@ const mapDispatchToProps = dispatch => {
   return {
     getAll: () => dispatch(getAll()),
     whoLiked: (thisPost, currentUserId) =>
-      dispatch(whoLiked(thisPost, currentUserId)),
-    toggleLike: thisPost => dispatch(toggleLike(thisPost)),
-    increaseLikes: (thisPost, currentUserId) =>
-      dispatch(increaseLikes(thisPost, currentUserId))
+      dispatch(whoLiked(thisPost, currentUserId))
+    // toggleLike: thisPost => dispatch(toggleLike(thisPost))
+    // increaseLikes: (thisPost, currentUserId) =>
+    //   dispatch(increaseLikes(thisPost, currentUserId))
   };
 };
 
