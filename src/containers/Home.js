@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { ListGroup, Image } from 'react-bootstrap';
 import _ from 'lodash';
 import { Auth } from 'aws-amplify';
+import Gravatar from 'react-gravatar';
 
 import { whoLiked } from '../actions/likes';
 import { getAll } from '../actions/getAll';
@@ -16,8 +17,6 @@ class Home extends Component {
       postsWithImages: [],
       currentUserId: ''
     };
-    // this.like = this.like.bind(this);
-    // this.heartCount = this.like.heartCount(this);
   }
 
   async componentDidMount() {
@@ -43,14 +42,10 @@ class Home extends Component {
   }
 
   like = postId => {
-    const currentUserId =
-      Auth._storage[
-        'aws.cognito.identity-id.us-east-2:6730df8d-ac6a-4cc3-92cf-c464462c7656'
-      ];
     const thisPost = this.state.postsWithImages.find(
       post => post.postId === postId
     );
-    this.props.whoLiked(thisPost, currentUserId);
+    this.props.whoLiked(thisPost, this.state.currentUserId);
     this.forceUpdate();
   };
 
@@ -61,7 +56,7 @@ class Home extends Component {
           <ListGroup key={post.createdAt} className="single-post">
             <div className="header level">
               <figure className="image is-32x32">
-                <img alt="gravatar" src={post.attachment} />
+                <Gravatar email={`${post.filter}`} />
               </figure>
               <span className="username">{post.userId}</span>
             </div>
