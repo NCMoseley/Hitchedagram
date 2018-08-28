@@ -37,7 +37,7 @@ export function whoLiked(thisPost, currentUserId) {
           `/post/${thisPost.postId}`,
           {
             body: {
-              userId: thisPost.userId,
+              userId: thisPost.userId.userId,
               whoLiked: thisPost.whoLiked,
               likes: thisPost.whoLiked.length
             }

@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { Auth } from 'aws-amplify';
 import Gravatar from 'react-gravatar';
 
+import { createUser, getUsers } from '../actions/users';
 import { whoLiked } from '../actions/likes';
 import { getAll } from '../actions/getAll';
 import './home.css';
@@ -15,7 +16,8 @@ class Home extends Component {
     this.state = {
       isLoading: true,
       postsWithImages: [],
-      currentUserId: ''
+      currentUserId: '',
+      dbUsers: ''
     };
   }
 
@@ -23,14 +25,23 @@ class Home extends Component {
     if (!this.props.isAuthenticated) {
       return;
     }
+    if (this.props.newUser) {
+      this.props.createUser(this.props.newUser);
+    }
     try {
+      await this.props.getUsers();
       await this.props.getAll();
-      console.log('componentDidMount', this.props.posts);
+      console.log('componentDidMount', this.props.dbUsers);
       const currentUserId =
         Auth._storage[
           'aws.cognito.identity-id.us-east-2:6730df8d-ac6a-4cc3-92cf-c464462c7656'
         ];
       const postsWithImages = this.props.posts;
+      const dbUsers = this.props.dbUsers;
+      const combined = postsWithImages.map(post => {
+        post.userId = dbUsers.find(user => user.userId === post.userId);
+      });
+      // console.log(combined);
       this.setState({
         postsWithImages,
         currentUserId
@@ -45,20 +56,22 @@ class Home extends Component {
     const thisPost = this.state.postsWithImages.find(
       post => post.postId === postId
     );
+    console.log(thisPost);
     this.props.whoLiked(thisPost, this.state.currentUserId);
     this.forceUpdate();
   };
 
   renderpostsList(postsWithImages) {
+    console.log(postsWithImages);
     return (
       <div className="posts">
         {postsWithImages.map(post => (
           <ListGroup key={post.createdAt} className="single-post">
             <div className="header level">
               <figure className="image is-32x32">
-                <Gravatar email={`${post.filter}`} />
+                <Gravatar email={`${post.userId.ownerEmail}`} />
               </figure>
-              <span className="username">{post.userId}</span>
+              <span className="username">{post.userId.ownerName}</span>
             </div>
 
             <div className="content">
@@ -86,10 +99,7 @@ class Home extends Component {
               <p className="likes">
                 {post.whoLiked && post.whoLiked.length} likes
               </p>
-              <p className="caption">
-                <span>{post.userId}:</span>
-                {post.content}
-              </p>
+              <p className="caption">{post.content}</p>
             </div>
           </ListGroup>
         ))}
@@ -134,7 +144,9 @@ class Home extends Component {
 // Map redux state to component props
 function mapStateToProps(state) {
   return {
-    posts: state.allPostsReducer.posts
+    posts: state.allPostsReducer.posts,
+    newUser: state.usersReducer.newUser,
+    dbUsers: state.usersReducer.dbUsers
   };
 }
 
@@ -143,10 +155,9 @@ const mapDispatchToProps = dispatch => {
   return {
     getAll: () => dispatch(getAll()),
     whoLiked: (thisPost, currentUserId) =>
-      dispatch(whoLiked(thisPost, currentUserId))
-    // toggleLike: thisPost => dispatch(toggleLike(thisPost))
-    // increaseLikes: (thisPost, currentUserId) =>
-    //   dispatch(increaseLikes(thisPost, currentUserId))
+      dispatch(whoLiked(thisPost, currentUserId)),
+    createUser: newUser => dispatch(createUser(newUser)),
+    getUsers: () => dispatch(getUsers())
   };
 };
 
@@ -155,3 +166,18 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Home);
+
+//       const [itemsList, usersList] = response;
+
+//       const combined = itemsList.map(item => {
+//         item.itemowner = usersList.find(user => user.id === item.itemowner);
+
+//         if (item.borrower) {
+//           item.borrower = usersList.find(user => user.id === item.borrower);
+//         }
+//         return item;
+//       });
+
+//       dispatch(getProfile(combined));
+//     })
+//     .catch(error => dispatch(getProfileError(error)));

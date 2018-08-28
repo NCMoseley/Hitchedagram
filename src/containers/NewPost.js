@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 import { API } from 'aws-amplify';
 
@@ -8,19 +9,20 @@ import LoaderButton from '../components/LoaderButton';
 import DropdownButton from '../components/DropdownButton';
 import './newPost.css';
 
-export default class NewPost extends Component {
+class NewPost extends Component {
   constructor(props) {
     super(props);
-
     this.file = null;
-
     this.state = {
       isLoading: null,
       content: '',
       hasBeenLiked: false,
       whoLiked: [],
-      filter: 'normal'
+      filter: 'normal',
+      ownerEmail: '',
+      ownerName: ''
     };
+    console.log(this.props.newUser);
   }
 
   validateForm() {
@@ -47,6 +49,7 @@ export default class NewPost extends Component {
       return;
     }
     this.setState({ isLoading: true });
+
     try {
       const attachment = this.file ? await s3Upload(this.file) : null;
       await this.createPost({
@@ -101,3 +104,26 @@ export default class NewPost extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    // posts: state.allPostsReducer.posts,
+    // newUser: state.usersReducer.user
+  };
+}
+
+// Map redux actions to component props
+const mapDispatchToProps = dispatch => {
+  return {
+    // getAll: () => dispatch(getAll()),
+    // whoLiked: (thisPost, currentUserId) =>
+    //   dispatch(whoLiked(thisPost, currentUserId)),
+    // createUser: newUser => dispatch(createUser(newUser))
+  };
+};
+
+// Connected Component
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NewPost);

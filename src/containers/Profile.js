@@ -14,7 +14,7 @@ export default class Profile extends Component {
       posts: []
     };
     this.getImage = this.getImage.bind(this);
-    console.log(this.props);
+    // console.log(this.props);
   }
 
   async componentDidMount() {
